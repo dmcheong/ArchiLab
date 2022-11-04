@@ -15,10 +15,14 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ArchiLibrary\ArchiLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Microsoft.AspNetCore.Mvc.Versioning" />
+  </ItemGroup>
 </Project>
