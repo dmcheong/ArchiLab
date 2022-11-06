@@ -26,6 +26,31 @@ namespace ArchiLibrary.controllers
             return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
         }
 
+
+        [HttpGet("range")]
+        public async Task<IEnumerable<TModel>> GetPageByRange(string range)
+        {
+            int start, end;
+            //decoupage au niveau du tiret pour differencier le start et le end
+            string[] subs = range.Split('-');
+             start = int.Parse(subs[0]);
+             end = int.Parse(subs[1]);
+
+            Console.WriteLine(end);
+
+            List<TModel> Data  =  await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
+
+
+            List<TModel> rangeData = new List<TModel>();
+
+            for (int i = start; i < end; i++)
+            {
+                rangeData.Add(Data[i]);
+           }
+            return rangeData;   
+        }
+
+
         [HttpGet("{id}")]// /api/{item}/3
         public async Task<ActionResult<TModel>> GetById([FromRoute] int id)
         {

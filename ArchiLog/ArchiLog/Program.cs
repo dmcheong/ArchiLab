@@ -1,6 +1,7 @@
 using ArchiLog.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
+
+//serilog shit
+Log.Logger = new LoggerConfiguration()
+                       // add console as logging target
+                       .WriteTo.Console()
+                       // set default minimum level
+                       .MinimumLevel.Debug()
+                       .CreateLogger();
+
+//versioning
 
 builder.Services.AddApiVersioning(opt =>
 {
