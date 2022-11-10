@@ -3,6 +3,7 @@ using ArchiLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ArchiLibrary.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,35 +21,15 @@ namespace ArchiLibrary.controllers
             _context = context;
         }
 
+
+
         [HttpGet]
-        public async Task<IEnumerable<TModel>> GetAll()
+        public async Task<IEnumerable<TModel>> GetAll([FromQuery] Params param)
         {
-            return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
+            return await _context.Set<TModel>().Where(x => x.Active).PicByRange(param).ToListAsync();
         }
 
 
-        [HttpGet("range")]
-        public async Task<IEnumerable<TModel>> GetPageByRange(string range)
-        {
-            int start, end;
-            //decoupage au niveau du tiret pour differencier le start et le end
-            string[] subs = range.Split('-');
-             start = int.Parse(subs[0]);
-             end = int.Parse(subs[1]);
-
-            Console.WriteLine(end);
-
-            List<TModel> Data  =  await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
-
-
-            List<TModel> rangeData = new List<TModel>();
-
-            for (int i = start; i < end; i++)
-            {
-                rangeData.Add(Data[i]);
-           }
-            return rangeData;   
-        }
 
 
         [HttpGet("{id}")]// /api/{item}/3
@@ -59,6 +40,8 @@ namespace ArchiLibrary.controllers
                 return NotFound();
             return item;
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> PostItem([FromBody] TModel item)
@@ -81,9 +64,10 @@ namespace ArchiLibrary.controllers
             //_context.Entry(item).State = EntityState.Modified;
             _context.Update(item);
             await _context.SaveChangesAsync();
-
             return item;
         }
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<TModel>> DeleteItem([FromRoute] int id)
