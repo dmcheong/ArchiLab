@@ -10,7 +10,7 @@ namespace ArchiLog.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(@"Server=localhost;Database=master;User=sa;Password=Docker@123;");
+            optionsBuilder.UseSqlServer(@"Server=localhost;Database=Archi;User=sa;Password=Docker@123;");
         }
 
         public DbSet<Brand> Brands { get; set; }
