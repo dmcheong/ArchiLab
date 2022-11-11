@@ -11,7 +11,7 @@ namespace ArchiLog.Data
         {
             base.OnConfiguring(optionsBuilder);
             //optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=archilog;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            optionsBuilder.UseSqlServer(@"Server=localhost;Database=archilog;User=sa;Password=Carnel123@");
+            optionsBuilder.UseSqlServer(@"Server=localhost;Database=carshitnew;User=sa;Password=Carnel123@");
 
          }
 

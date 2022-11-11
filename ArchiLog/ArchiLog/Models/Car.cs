@@ -11,8 +11,9 @@ namespace ArchiLog.Models
         [Required()]
         public string? Name { get; set; }
         public int BrandID { get; set; }
+        public int AmountSold { get; set; }
+        public string? CarType { get; set; }
         [ForeignKey("BrandID")]
         public Brand? Brand { get; set; }
-
     }
 }

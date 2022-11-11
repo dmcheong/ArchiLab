@@ -33,6 +33,9 @@ namespace ArchiLog.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("AmountSold")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -63,8 +66,14 @@ namespace ArchiLog.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("AmountSold")
+                        .HasColumnType("int");
+
                     b.Property<int>("BrandID")
                         .HasColumnType("int");
+
+                    b.Property<string>("CarType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

@@ -26,8 +26,19 @@ namespace ArchiLibrary.controllers
         [HttpGet]
         public async Task<IEnumerable<TModel>> GetAll([FromQuery] Params param)
         {
-            return await _context.Set<TModel>().Where(x => x.Active).PicByRange(param).ToListAsync();
+            //return await _context.Set<TModel>().Where(x => x.Active).SortDsc(param).PicByRange(param).ToListAsync();
+
+            if(param.CreatedAt != null)
+            {
+                var date = DateTime.Parse(param.CreatedAt);
+
+                return await _context.Set<TModel>().Where(x => x.CarType == param.Type || x.CreatedAt == date).ToListAsync();
+            }
+            return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
+
         }
+
+
 
 
 
