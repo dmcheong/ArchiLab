@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using ArchiLibrary.Extensions;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
+using Microsoft.Extensions.Logging;
 
 namespace ArchiLibrary.controllers
 {
@@ -19,10 +22,13 @@ namespace ArchiLibrary.controllers
     public abstract class BaseController<TContext, TModel> : ControllerBase where TContext : BaseDbContext where TModel : BaseModel
     {
         protected readonly TContext _context;
+        private readonly ILogger _logger;
 
-        public BaseController(TContext context)
+        public BaseController(TContext context, Microsoft.Extensions.Logging.ILogger logger)
         {
             _context = context;
+            _logger = logger;
+           
         }
 
 
@@ -30,14 +36,14 @@ namespace ArchiLibrary.controllers
         [HttpGet]
         public async Task<IEnumerable<TModel>> GetAll([FromQuery] Params param)
         {
+            _logger.LogInformation("running.....");
             if (param.Range != null) {
                 return await _context.Set<TModel>().Where(x => x.Active).PicByRange(param).ToListAsync();
             }
-
+            //search for a specific date
             else if (param.CreatedAt != null)
 
             {
-
                 var date = DateTime.Parse(param.CreatedAt);
 
                 return await _context.Set<TModel>().Where(x => x.CreatedAt == date).ToListAsync();
@@ -51,26 +57,27 @@ namespace ArchiLibrary.controllers
                 var beginDate = DateTime.Parse(dates[0]);
                 var endDate = DateTime.Parse(dates[1]);
 
-                return await _context.Set<TModel>().Where(x => x.CreatedAt < beginDate & x.CreatedAt < endDate).ToListAsync();
+                return await _context.Set<TModel>().Where(x => x.CreatedAt == beginDate & x.CreatedAt <= endDate).ToListAsync();
 
             }
 
+            //carType search
             else if (param.Type != null)
             {
                 string champ = param.Type;
 
-                string[] type = champ.Split(',');
+                var type = champ.Split(',');
 
-                //var res = await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
-                //List.Add(1);
+                IQueryable <TModel> data = (IQueryable<TModel>)Array.Empty<TModel>().AsEnumerable();
+
                 foreach (var element in type)
                 {
-                    Console.WriteLine(element);
-                    return await _context.Set<TModel>().Where(x => x.CarType == element).ToListAsync();
+                  // data= new Data(await _context.Set<TModel>().Where(x => x.CarType == element).ToListAsync());
+                }
+                return data;
                 }
 
-                return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
-            }
+            
 
             //amount sold
             else if (param.Sold != null)

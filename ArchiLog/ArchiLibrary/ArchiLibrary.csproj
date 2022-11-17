@@ -15,10 +15,6 @@
 
   <ItemGroup>
     <None Remove="Microsoft.AspNetCore.Mvc.Versioning" />
-    <None Remove="Log\" />
     <None Remove="Serilog" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Log\" />
   </ItemGroup>
 </Project>
