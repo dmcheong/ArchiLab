@@ -10,6 +10,7 @@ namespace ArchiLog.Models
         [StringLength(50)]
         [Required()]
         public string? Name { get; set; }
+        public int AmountSold { get; set; }
 
         //[Column(Name="nomdeColonne")]
         public string? Slogan { get; set; }

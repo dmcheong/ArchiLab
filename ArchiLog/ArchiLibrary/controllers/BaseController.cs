@@ -2,28 +2,45 @@
 using ArchiLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
+using Serilog.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace ArchiLibrary.controllers
 {
     [ApiController]
-    public abstract class BaseController<TContext, TModel> : ControllerBase where TContext : BaseDbContext where TModel : BaseModel
+    public abstract class BaseController<TContext, TModel> : ControllerBase where TContext : BaseDbContext where TModel : BaseModel 
     {
         protected readonly TContext _context;
+        private readonly ILogger _logger;
 
-        public BaseController(TContext context)
+
+        public BaseController(TContext context, Microsoft.Extensions.Logging.ILogger logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TModel>> GetAll()
+        public async Task<IEnumerable<TModel>> GetAll([FromQuery] Params param)
         {
+            //return await _context.Set<TModel>().Where(x => x.Active).SortDsc(param).PicByRange(param).ToListAsync();
+            _logger.LogInformation("Api executing...");
+            if (param.CreatedAt != null)
+            {
+                var date = DateTime.Parse(param.CreatedAt);
+
+                return await _context.Set<TModel>().Where(x => x.CarType == param.Type || x.CreatedAt == date).ToListAsync();
+            }
             return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
+
         }
 
         [HttpGet("{id}")]// /api/{item}/3
@@ -56,9 +73,10 @@ namespace ArchiLibrary.controllers
             //_context.Entry(item).State = EntityState.Modified;
             _context.Update(item);
             await _context.SaveChangesAsync();
-
             return item;
         }
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<TModel>> DeleteItem([FromRoute] int id)
@@ -76,5 +94,6 @@ namespace ArchiLibrary.controllers
         {
             return _context.Set<TModel>().Any(x => x.ID == id);
         }
+
     }
 }

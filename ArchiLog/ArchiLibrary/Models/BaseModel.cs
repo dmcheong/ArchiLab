@@ -11,6 +11,8 @@ namespace ArchiLibrary.Models
         public int ID { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool Active { get; set; } = true;
+        public String CarType { get; set; }
+        public int AmountSold { get; set; }
         public DateTime? DeletedAt { get; set; }
     }
 }
