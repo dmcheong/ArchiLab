@@ -14,6 +14,7 @@ using Microsoft.VisualBasic;
 
 namespace ArchiLibrary.controllers
 {
+
     [ApiController]
     public abstract class BaseController<TContext, TModel> : ControllerBase where TContext : BaseDbContext where TModel : BaseModel
     {
@@ -36,9 +37,22 @@ namespace ArchiLibrary.controllers
             else if (param.CreatedAt != null)
 
             {
+
                 var date = DateTime.Parse(param.CreatedAt);
 
                 return await _context.Set<TModel>().Where(x => x.CreatedAt == date).ToListAsync();
+            }
+            //date entre
+            else if(param.dateBetween != null)
+            {
+                string champ = param.dateBetween;
+                string[] dates = champ.Split(',');
+
+                var beginDate = DateTime.Parse(dates[0]);
+                var endDate = DateTime.Parse(dates[1]);
+
+                return await _context.Set<TModel>().Where(x => x.CreatedAt < beginDate & x.CreatedAt < endDate).ToListAsync();
+
             }
 
             else if (param.Type != null)
@@ -58,21 +72,32 @@ namespace ArchiLibrary.controllers
                 return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
             }
 
-
+            //amount sold
             else if (param.Sold != null)
             {
                 string champ = param.Sold;
+
+                int amount = int.Parse(champ);
+
+                if (!String.IsNullOrEmpty(amount.ToString())) {
+
+                    return await _context.Set<TModel>().Where(x => x.AmountSold == amount).ToListAsync();
+                }
+
+            }
+            //sold between
+            else if(param.SoldBetween != null)
+            {
+                string champ = param.SoldBetween;
                 string[] amount = champ.Split(',');
 
                 int min = int.Parse(amount[0]);
-
                 int max = int.Parse(amount[1]);
 
-                if (!String.IsNullOrEmpty(min.ToString()) & !String.IsNullOrEmpty(max.ToString())) {
-
-                    return await _context.Set<TModel>().Where(x => x.AmountSold >= min & x.AmountSold <= max ).ToListAsync();
+                if (!String.IsNullOrEmpty(min.ToString()) & !String.IsNullOrEmpty(max.ToString()))
+                {
+                    return await _context.Set<TModel>().Where(x => x.AmountSold >= min & x.AmountSold <= max).ToListAsync();
                 }
-                return await _context.Set<TModel>().Where(x => x.AmountSold == min).ToListAsync();
 
             }
 

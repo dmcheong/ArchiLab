@@ -12,12 +12,13 @@ builder.Services.AddControllers();
 
 
 //serilog shit
-Log.Logger = new LoggerConfiguration()
-                       // add console as logging target
-                       .WriteTo.Console()
-                       // set default minimum level
-                       .MinimumLevel.Debug()
-                       .CreateLogger();
+// Add services to the container.
+var logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .Enrich.FromLogContext()
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 //versioning
 
