@@ -1,0 +1,21 @@
+OMAIMA BELMADKOUR
+filtre (opérationnel)
+
+CARNEL MEGBLETO
+pagination (opérationnel)
+versioning (opérationnel)
+filtre (opérationnel)
+
+
+DAVID CHEONG
+logs (opérationnel)
+
+ENZO SABBATORSI
+authentification (non opérationnel)
+Tris(opérationnel)
+
+
+
+LECLREC VINCENT (le prof)
+CRUD
+TRIS

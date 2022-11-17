@@ -16,5 +16,6 @@
   <ItemGroup>
     <None Remove="Microsoft.AspNetCore.Mvc.Versioning" />
     <None Remove="Serilog" />
+    <None Remove="AUTHORS.txt" />
   </ItemGroup>
 </Project>

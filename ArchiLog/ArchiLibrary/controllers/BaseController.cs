@@ -33,6 +33,7 @@ namespace ArchiLibrary.controllers
 
 
 
+
         [HttpGet]
         public async Task<IEnumerable<TModel>> GetAll([FromQuery] Params param)
         {
@@ -72,9 +73,8 @@ namespace ArchiLibrary.controllers
 
                 foreach (var element in type)
                 {
-                  // data= new Data(await _context.Set<TModel>().Where(x => x.CarType == element).ToListAsync());
+                 return (await _context.Set<TModel>().Where(x => x.CarType == element).ToListAsync());
                 }
-                return data;
                 }
 
             
