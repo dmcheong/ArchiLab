@@ -7,7 +7,7 @@ namespace ArchiLibrary.Models
         public string? Desc { get; set; }
         public string? Range { get; set; }
         public string? Type { get; set; }
-        public int? Sold { get; set;}
+        public string? Sold { get; set;}
         public string? CreatedAt { get; set;}
         public string? Fields { get; set; }
     }

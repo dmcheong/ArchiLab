@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Xml.Linq;
+using Microsoft.VisualBasic;
 
 namespace ArchiLibrary.controllers
 {
@@ -26,19 +29,65 @@ namespace ArchiLibrary.controllers
         [HttpGet]
         public async Task<IEnumerable<TModel>> GetAll([FromQuery] Params param)
         {
-            //return await _context.Set<TModel>().Where(x => x.Active).SortDsc(param).PicByRange(param).ToListAsync();
+            if (param.Range != null) {
+                return await _context.Set<TModel>().Where(x => x.Active).PicByRange(param).ToListAsync();
+            }
 
-            if(param.CreatedAt != null)
+            else if (param.CreatedAt != null)
+
             {
                 var date = DateTime.Parse(param.CreatedAt);
 
-                return await _context.Set<TModel>().Where(x => x.CarType == param.Type || x.CreatedAt == date).ToListAsync();
+                return await _context.Set<TModel>().Where(x => x.CreatedAt == date).ToListAsync();
             }
+
+            else if (param.Type != null)
+            {
+                string champ = param.Type;
+
+                string[] type = champ.Split(',');
+
+                //var res = await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
+                //List.Add(1);
+                foreach (var element in type)
+                {
+                    Console.WriteLine(element);
+                    return await _context.Set<TModel>().Where(x => x.CarType == element).ToListAsync();
+                }
+
+                return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
+            }
+
+
+            else if (param.Sold != null)
+            {
+                string champ = param.Sold;
+                string[] amount = champ.Split(',');
+
+                int min = int.Parse(amount[0]);
+
+                int max = int.Parse(amount[1]);
+
+                if (!String.IsNullOrEmpty(min.ToString()) & !String.IsNullOrEmpty(max.ToString())) {
+
+                    return await _context.Set<TModel>().Where(x => x.AmountSold >= min & x.AmountSold <= max ).ToListAsync();
+                }
+                return await _context.Set<TModel>().Where(x => x.AmountSold == min).ToListAsync();
+
+            }
+
+            else if (param.Asc != null)
+            {
+                return await _context.Set<TModel>().Where(x => x.Active).SortAsc(param).ToListAsync();
+
+            }
+            else if (param.Desc != null){
+                return await _context.Set<TModel>().Where(x => x.Active).SortDsc(param).ToListAsync();
+
+            }
+
             return await _context.Set<TModel>().Where(x => x.Active).ToListAsync();
-
-        }
-
-
+    }
 
 
 
