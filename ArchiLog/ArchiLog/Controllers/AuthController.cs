@@ -26,6 +26,7 @@ namespace ArchiLog.Controllers
 
         [HttpPost]
         [Route("login")]
+
         public IActionResult Login([FromBody] LoginModel model)
         {
             var user = _jwtAuth.Authenticate(model.Email, model.Password);

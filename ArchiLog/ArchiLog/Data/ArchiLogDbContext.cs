@@ -7,13 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace ArchiLog.Data
 {
     public class ArchiLogDbContext : BaseDbContext
     {
+        public ArchiLogDbContext(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         public IConfiguration Configuration { get; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,7 +33,7 @@ namespace ArchiLog.Data
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "JwtApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "JwtApitest", Version = "v1" });
             });
 
             services.AddAuthentication(options =>
